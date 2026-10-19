@@ -3,9 +3,13 @@ from PIL import Image, UnidentifiedImageError
 import streamlit as st
 import requests
 
+API_BASE_URL = st.secrets["API_URL"]
+
 st.set_page_config(page_title="HandSpell Reader", layout="centered")
 st.title("✋ HandSpell Reader")
 st.write("Upload a hand sign image to predict the letter.")
+
+st.write(f"Connected to backend: {API_BASE_URL}")
 
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
@@ -21,7 +25,7 @@ if uploaded_file is not None:
     try:
         with st.spinner("Classifying..."):
             response = requests.post(
-                st.secrets["API_URL"],
+                API_BASE_URL,
                 files={
                     "file": (
                         uploaded_file.name,
