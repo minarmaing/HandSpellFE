@@ -9,8 +9,6 @@ st.set_page_config(page_title="HandSpell Reader", layout="centered")
 st.title("✋ HandSpell Reader")
 st.write("Upload a hand sign image to predict the letter.")
 
-st.write(f"Connected to backend: {API_BASE_URL}")
-
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
