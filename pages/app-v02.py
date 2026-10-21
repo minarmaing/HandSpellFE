@@ -6,7 +6,7 @@ import requests
 
 API_BASE_URL = st.secrets["API_URL"]
 
-API_PREDICT_ENDPOINT = API_BASE_URL + 'predict/'
+API_PREDICT_ENDPOINT = API_BASE_URL + 'predict'
 
 st.set_page_config(page_title="HandSpell Reader", layout="centered")
 st.title("✋ HandSpell Reader")
@@ -38,6 +38,9 @@ if uploaded_file is not None:
                 },
                 timeout=120,
             )
+            #st.write("Request URL:", response.url)
+            #st.write("Status code:", response.status_code)
+            #st.code(response.text, language="json")
         if response.status_code == 200:
             result = response.json()
             st.success(f"Predicted letter: {result['letter']}")
