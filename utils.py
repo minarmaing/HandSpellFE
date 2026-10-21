@@ -14,13 +14,20 @@ list_words = ['Hello', 'Love', 'Website', 'No', 'Yes']
 def take_random_word(list_of_words: list):
 
     #random_word = np.random.choice(list_of_words, 1)
-    st.session_state.idx = 0
+    #st.session_state.idx = 0
 
-    random_word = list_of_words[st.session_state.idx]
+    #random_word = list_of_words[st.session_state.idx]
 
-    st.write(random_word)
+    #st.write(random_word)
 
-    return random_word
+    #return random_word
+
+    idx = st.session_state.idx
+
+    return list_of_words[idx%len(list_of_words)]
+
+
+
 
 def take_random_letter(word):
 
