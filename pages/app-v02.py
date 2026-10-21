@@ -6,7 +6,7 @@ import requests
 
 API_BASE_URL = st.secrets["API_URL"]
 
-API_PREDICT_ENDPOINT = API_BASE_URL + 'predict/'
+API_PREDICT_ENDPOINT = API_BASE_URL + 'predict'
 
 st.set_page_config(page_title="HandSpell Reader", layout="centered")
 st.title("✋ HandSpell Reader")

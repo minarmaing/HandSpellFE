@@ -13,9 +13,14 @@ list_words = ['Hello', 'Love', 'Website', 'No', 'Yes']
 
 def take_random_word(list_of_words: list):
 
-    random_word = np.random.choice(list_of_words, 1)
+    #random_word = np.random.choice(list_of_words, 1)
+    st.session_state.idx = 0
 
-    return random_word[0]
+    random_word = list_of_words[st.session_state.idx]
+
+    st.write(random_word)
+
+    return random_word
 
 def take_random_letter(word):
 
@@ -39,9 +44,9 @@ def take_random_letter(word):
     return "".join(random_word), removed_letter
 
 
-def text_to_image_spellit(word: str, removed_letter):
+def text_to_image_spellit(word: str):
 
-    container = st.container(horizontal=True, wrap=True)
+    container = st.container(horizontal=True, wrap=True, border=True)
 
     with container:
 
@@ -51,7 +56,9 @@ def text_to_image_spellit(word: str, removed_letter):
 
             if letter == '_':
 
-                uploaded_file = st.file_uploader("Choose a file")
+                st.image('raw_data/images/question mark.png',
+                         caption='?',
+                         width=64)
 
             else:
                 response = requests.get(
@@ -62,8 +69,6 @@ def text_to_image_spellit(word: str, removed_letter):
                 st.image(response.content,
                         caption=letter,
                         width=64)
-
-    compare_predict(removed_letter, uploaded_file)
 
     return container
 
@@ -107,8 +112,8 @@ def compare_predict(removed_letter, uploaded_file):
         return st.write(removed_letter == result['letter'])
 
     else:
-        st.write('test')
+        st.write('Try a different image !')
 
-random_word = take_random_word(list_words)
+#st.session_state.random_word = take_random_word(list_words)
 
-word_with_removed_letter, removed_letter = take_random_letter(random_word)
+#word_with_removed_letter, removed_letter = take_random_letter(st.session_state.random_word)
