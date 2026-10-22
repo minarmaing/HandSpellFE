@@ -4,6 +4,7 @@ backgroundColor = "#F3EEE4"
 secondaryBackgroundColor = "#FBF8F2"
 textColor = "#1C1A17"
 
+baseFontSize=16
 font = "'DM Sans':https://fonts.googleapis.com/css2?family=DM+Sans:wght@400..700&display=swap, sans-serif"
 headingFont = "'Bricolage Grotesque':https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600..800&display=swap, sans-serif"
 codeFont = "'JetBrains Mono':https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap, monospace"
