@@ -63,7 +63,7 @@ def text_to_image_spellit(word: str):
 
             if letter == '_':
 
-                st.image('raw_data/images/question mark.png',
+                st.image('.images/question mark.png',
                          caption='?',
                          width=64)
 
