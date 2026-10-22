@@ -115,7 +115,7 @@ def render_result(result, threshold):
 
 
 st.markdown(
-    "# HandSpell <span class='accent'>Read It</span>",
+    "# <span class='accent'>Read</span> It",
     unsafe_allow_html=True,
 )
 st.subheader("Hand Sign Translation")
