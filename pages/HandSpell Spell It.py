@@ -44,23 +44,30 @@ if "random_word" not in st.session_state:
 
 text_to_image_spellit(st.session_state.word_with_removed_letter)
 
-enable_webcam = st.checkbox("Enable camera")
-enable_upload = st.checkbox("Enable upload")
-webcam_uploaded_file = st.camera_input("Guess the missing letter!", disabled=not enable_webcam)
+# enable_webcam = st.checkbox("Enable camera")
+# enable_upload = st.checkbox("Enable upload")
+# webcam_uploaded_file = st.camera_input("Guess the missing letter!", disabled=not enable_webcam)
 
-if enable_webcam:
+# if enable_webcam:
 
-    compare_predict(st.session_state.removed_letter, webcam_uploaded_file)
+#     compare_predict(st.session_state.removed_letter, webcam_uploaded_file)
 
 
-st.write('Or')
+# st.write('Or')
 
-uploaded_file = st.file_uploader("Upload an image !", type=["jpg", "jpeg", "png"], disabled=not enable_upload)
+# uploaded_file = st.file_uploader("Upload an image !", type=["jpg", "jpeg", "png"], disabled=not enable_upload)
 
-if enable_upload:
+# if enable_upload:
 
-    compare_predict(st.session_state.removed_letter, uploaded_file)
+#     compare_predict(st.session_state.removed_letter, uploaded_file)
 
+
+source = st.radio("Input", ["Upload image", "Take a photo"], horizontal=True)
+upload = (st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"],
+            key="single_upload") if source == "Upload image"
+          else st.camera_input("Take a hand sign photo"))
+
+compare_predict(st.session_state.removed_letter, upload)
 
 if st.button('Refresh'):
 
