@@ -26,45 +26,26 @@ st.subheader("Guess what sign this is!")
 
 LETTERS = list("ABCDEFGHIKLMNOPQRSTUVWXY")
 
-CURRENT_LETTER = None
-
-letter = None
-
-if "get_image" not in st.session_state:
-    st.session_state.a_done = False
 
 def random_image():
-
     r = np.random.choice(len(LETTERS))
+    letter = LETTERS[r]
+    image_path = f'.images/ASL Letter Reference/{letter}.jpg'
+    return letter, image_path
 
-    CURRENT_LETTER = LETTERS[r]
-
-    st.image(f'.images/ASL Letter Reference/{CURRENT_LETTER}.jpg')
-
-    return CURRENT_LETTER
 
 if st.button("Get a new letter image !", width=400):
+    st.session_state.nameit_true_letter, st.session_state.nameit_image_path = random_image()
+    st.session_state.nameit_guess = ""  # clear the previous guess
 
-    CURRENT_LETTER = random_image()
+if "nameit_image_path" in st.session_state:
+    st.image(st.session_state.nameit_image_path)
 
-    letter = st.text_input('Guess the Letter!', max_chars=1, width=400)
+    letter = st.text_input("Guess the Letter!", max_chars=1, width=400, key="nameit_guess")
 
-    st.write(CURRENT_LETTER)
-
-    st.session_state.get_image = True
-#st.write(letter)
-
-if letter:
-
-    not st.session_state.get_image
-
-    letter = letter.upper()
-
-    if letter == CURRENT_LETTER:
-
-        st.write(f'You guessed it right, the sign represents {letter} !')
-
-
-    else:
-
-        st.write(f'You guessed it wrong, the letter was {CURRENT_LETTER} try again !')
+    if letter:
+        true_letter = st.session_state.nameit_true_letter
+        if letter.lower() == true_letter.lower():
+            st.write(f"You guessed it right, the sign represents {true_letter} !")
+        else:
+            st.write(f"You guessed it wrong, try again !")
