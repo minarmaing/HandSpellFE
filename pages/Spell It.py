@@ -3,8 +3,8 @@ import requests
 import numpy as np
 import streamlit as st
 
-from PIL import Image, UnidentifiedImageError
-from utils import text_to_image_spellit, take_random_letter, take_random_word, compare_predict, list_words #word_with_removed_letter, #removed_letter
+from utils import text_to_image_spellit, take_random_letter, take_random_word
+from utils import get_image_and_prediction, list_words #word_with_removed_letter, #removed_letter
 from style import load_style
 load_style()
 
@@ -46,30 +46,32 @@ if "random_word" not in st.session_state:
 
 text_to_image_spellit(st.session_state.word_with_removed_letter)
 
-# enable_webcam = st.checkbox("Enable camera")
-# enable_upload = st.checkbox("Enable upload")
-# webcam_uploaded_file = st.camera_input("Guess the missing letter!", disabled=not enable_webcam)
+def compare_predict(true_missing_letter, uploaded_image):
+    image, predicted_letter, prediction = get_image_and_prediction(uploaded_image)
+    if image is not None:
+        st.image(image, width=200)
 
-# if enable_webcam:
+        if predicted_letter:
+            prediction_confidence = prediction["confidence"]
+            if prediction["letter"] == true_missing_letter:
+                st.success(f"That's right, word was missing a **{true_missing_letter}**, good fingerspelling !")
+            else:
+                st.error(f"You signed **{predicted_letter}**, it's not quite right. Try again !")
+            st.write(f"Model is {prediction_confidence*100:.0f}% confident you signed **{predicted_letter}**.")
 
-#     compare_predict(st.session_state.removed_letter, webcam_uploaded_file)
+left, right = st.columns([1, 1], gap="large")
+with left:
+    st.header("Image input")
+    st.caption("Use good lighting and keep the whole hand and wrist visible.")
 
+    source = st.radio("Input", ["Upload image", "Take a photo"], horizontal=True)
+    upload = (st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"],
+                key="single_upload") if source == "Upload image"
+            else st.camera_input("Take a hand sign photo"))
 
-# st.write('Or')
-
-# uploaded_file = st.file_uploader("Upload an image !", type=["jpg", "jpeg", "png"], disabled=not enable_upload)
-
-# if enable_upload:
-
-#     compare_predict(st.session_state.removed_letter, uploaded_file)
-
-
-source = st.radio("Input", ["Upload image", "Take a photo"], horizontal=True)
-upload = (st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"],
-            key="single_upload") if source == "Upload image"
-          else st.camera_input("Take a hand sign photo"))
-
-compare_predict(st.session_state.removed_letter, upload)
+with right:
+    st.header("Translation results")
+    compare_predict(st.session_state.removed_letter, upload)
 
 if st.button('Refresh'):
 
