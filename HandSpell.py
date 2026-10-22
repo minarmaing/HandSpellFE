@@ -5,6 +5,8 @@ load_style()
 
 st.logo(".images/le-wagon-logo.png", size="large")
 
+st.set_page_config(page_title="HandSpell", page_icon=".images/le-wagon-logo.png", layout="wide")
+
 
 st.markdown(
     "# Hand<span class='accent'>Spell</span>",

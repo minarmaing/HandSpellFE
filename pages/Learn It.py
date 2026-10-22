@@ -16,7 +16,7 @@ API_SIGN_ENDPOINT = API_BASE_URL + 'sign/'
 API_PREDICT_ENDPOINT = API_BASE_URL + 'predict'
 
 st.markdown(
-    "#<span class='accent'>Image</span>",
+    "# <span class='accent'>Learn</span> It",
     unsafe_allow_html=True,
 )
 st.subheader("Input a Letter to get its Sign Language gesture !")
@@ -25,30 +25,32 @@ LETTERS = list("ABCDEFGHIKLMNOPQRSTUVWXY")
 
 letter = st.text_input('Letter', max_chars=1)
 
-letter = letter.upper()
+if letter:
 
-if letter in LETTERS:
-    st.write("Pumba approves :sunglasses:")
+    letter = letter.upper()
 
-    try:
-        with st.spinner("Getting image..."):
-           response = requests.get(
-               API_SIGN_ENDPOINT+letter,
-               timeout=120
-           )
+    if letter in LETTERS:
+        st.write("Pumba approves :sunglasses:")
 
-        if response.status_code == 200:
-            result = st.image(response.content)
-            #st.success(f"Predicted letter: {result['letter']}")
-            #st.write(f"Model score: {result['confidence']:.1%}")
-        else:
-            st.error(f"Error {response.status_code}: {response.text}")
-    except (ValueError, KeyError, TypeError) as e:
-        st.write(e)
-        st.error("The prediction service returned an invalid response.")
-    except requests.RequestException as e:
-        st.error(f"Request failed: {e}")
-        st.stop()
+        try:
+            with st.spinner("Getting image..."):
+                response = requests.get(
+                    API_SIGN_ENDPOINT+letter,
+                    timeout=120
+                )
 
-else:
-    st.write("Pumba is telling you to try a different letter -_-")
+            if response.status_code == 200:
+                result = st.image(response.content)
+                #st.success(f"Predicted letter: {result['letter']}")
+                #st.write(f"Model score: {result['confidence']:.1%}")
+            else:
+                st.error(f"Error {response.status_code}: {response.text}")
+        except (ValueError, KeyError, TypeError) as e:
+            st.write(e)
+            st.error("The prediction service returned an invalid response.")
+        except requests.RequestException as e:
+            st.error(f"Request failed: {e}")
+            st.stop()
+
+    else:
+        st.write("Pumba is telling you to try a different letter -_-")
