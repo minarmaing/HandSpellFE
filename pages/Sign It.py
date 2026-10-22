@@ -26,36 +26,60 @@ st.subheader("Try making the Sign of this letter!")
 
 LETTERS = list("ABCDEFGHIKLMNOPQRSTUVWXY")
 
-random_letter = None
-
 def take_random_letter(LETTERS: list=LETTERS):
 
     random_letter = np.random.choice(LETTERS, 1)
 
     return random_letter[0]
 
+def verify_result():
+
+    random_letter = st.session_state.signit_letter
+
+    result = st.session_state.signit_predicted_letter
+
+    if random_letter == result:
+
+        st.write('You guessed right!')
+
+    else:
+
+        st.write('You guessed wrong!')
+
 if st.button('Get a random letter!'):
 
     random_letter = take_random_letter(LETTERS)
 
+    st.session_state.signit_letter = random_letter
+
+    #RESET session state VARIABLES KIND SIR
+
+    st.session_state.signit_upload = ''
+    #st.session_state.signit_image = ''
+    st.session_state.signit_predicted_letter = ''
+
     st.write(random_letter)
 
+if 'signit_letter' in st.session_state:
 
-source = st.radio("Input", ["Upload image", "Take a photo"], horizontal=True)
-upload = (st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"],
-            key="single_upload") if source == "Upload image"
-          else st.camera_input("Take a hand sign photo"))
+    source = st.radio("Input", ["Upload image", "Take a photo"], horizontal=True, key='signit_source')
+
+if 'signit_source' in st.session_state:
+    upload = (st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"],
+                               key='signit_image') if source == "Upload image"
+              else st.camera_input("Take a hand sign photo", key='signit_image'))
 
 
 
-if upload is not None:
+if 'signit_image' in st.session_state:
     try:
-        st.image(upload, width=300)
+        st.image(st.session_state.signit_image, width=300)
     except (UnidentifiedImageError, OSError, ValueError):
         st.error("Cannot read this image. Please upload another image.")
         st.stop()
 
     with st.spinner("Classifying..."):
+        upload = st.session_state.signit_image
         response = requests.post(
             API_PREDICT_ENDPOINT,
             files={
@@ -70,16 +94,9 @@ if upload is not None:
 
     if response.status_code == 200:
         result = response.json()
+        st.session_state.signit_predicted_letter = result['letter']
         st.success(f"Predicted letter: {result['letter']}")
         st.write(f"Model score: {result['confidence']:.1%}")
+        verify_result()
     else:
         st.error(f"Error {response.status_code}: {response.text}")
-
-
-if result['letter'] == random_letter:
-
-    st.write('You got the right sign !')
-
-else:
-
-    st.write('You got the wrong sign !')
