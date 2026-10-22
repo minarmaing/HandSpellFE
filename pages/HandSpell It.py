@@ -5,10 +5,21 @@ import streamlit as st
 
 from PIL import Image, UnidentifiedImageError
 from utils import text_to_image_spellit, take_random_letter, take_random_word, compare_predict, list_words #word_with_removed_letter, #removed_letter
+from style import load_style
+load_style()
 
-st.set_page_config(page_title="HandSpell Spell It", layout="centered")
-st.title("Spell it")
-st.write("Complete the word with an image !")
+st.logo(".images/le-wagon-logo.png", size="large")
+
+
+st.markdown(
+    "# <span class='accent'>Spell</span> It",
+    unsafe_allow_html=True,
+)
+st.subheader("Complete the word with an image !")
+
+#st.set_page_config(page_title="HandSpell Spell It", layout="centered")
+#st.title("Spell It")
+#st.write("Complete the word with an image !")
 
 
 #random_word = take_random_word(list_words)
@@ -37,12 +48,18 @@ enable_webcam = st.checkbox("Enable camera")
 enable_upload = st.checkbox("Enable upload")
 webcam_uploaded_file = st.camera_input("Guess the missing letter!", disabled=not enable_webcam)
 
+if enable_webcam:
+
+    compare_predict(st.session_state.removed_letter, webcam_uploaded_file)
+
+
 st.write('Or')
 
 uploaded_file = st.file_uploader("Upload an image !", type=["jpg", "jpeg", "png"], disabled=not enable_upload)
 
+if enable_upload:
 
-compare_predict(st.session_state.removed_letter, webcam_uploaded_file)
+    compare_predict(st.session_state.removed_letter, uploaded_file)
 
 
 if st.button('Refresh'):
