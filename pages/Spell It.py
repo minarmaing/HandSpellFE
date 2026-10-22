@@ -14,7 +14,7 @@ st.logo(".images/le-wagon-logo.png", size="large")
 
 
 st.markdown(
-    "# <span class='accent'>Spell</span> It",
+    "# <span class='accent'>Spell</span>It",
     unsafe_allow_html=True,
 )
 st.subheader("Complete the word with an image !")
