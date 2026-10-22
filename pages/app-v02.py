@@ -38,6 +38,9 @@ if uploaded_file is not None:
                 },
                 timeout=120,
             )
+            #st.write("Request URL:", response.url)
+            #st.write("Status code:", response.status_code)
+            #st.code(response.text, language="json")
         if response.status_code == 200:
             result = response.json()
             st.success(f"Predicted letter: {result['letter']}")
