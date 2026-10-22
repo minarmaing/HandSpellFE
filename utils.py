@@ -80,7 +80,7 @@ def text_to_image_spellit(word: str):
                     timeout=120
                     )
                 st.image(response.content,
-                        caption=letter,
+                        caption=f"**{letter}**",
                         width=64)
 
     return container

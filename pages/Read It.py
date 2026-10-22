@@ -68,11 +68,13 @@ with left:
         st.session_state.readit_letter = letter
         st.session_state.results = prediction
 
-        if image is not None:
-            st.image(image, width=200)
+
 
 with right:
     st.header("Translation results")
+    if image is not None:
+        st.image(image, width=200)
+
     results = st.session_state.get("results", [])
     letter = st.session_state.readit_letter
     # st.write(results)
