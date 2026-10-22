@@ -4,6 +4,7 @@ import numpy as np
 import streamlit as st
 
 
+from PIL import Image, UnidentifiedImageError
 from utils import compare_predict
 from style import load_style
 load_style()
@@ -46,4 +47,39 @@ upload = (st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"],
           else st.camera_input("Take a hand sign photo"))
 
 
-compare_predict(random_letter, upload)
+
+if upload is not None:
+    try:
+        st.image(upload, width=300)
+    except (UnidentifiedImageError, OSError, ValueError):
+        st.error("Cannot read this image. Please upload another image.")
+        st.stop()
+
+    with st.spinner("Classifying..."):
+        response = requests.post(
+            API_PREDICT_ENDPOINT,
+            files={
+                "file": (
+                    upload.name,
+                    upload.getvalue(),
+                    upload.type,
+                )
+            },
+            timeout=120,
+            )
+
+    if response.status_code == 200:
+        result = response.json()
+        st.success(f"Predicted letter: {result['letter']}")
+        st.write(f"Model score: {result['confidence']:.1%}")
+    else:
+        st.error(f"Error {response.status_code}: {response.text}")
+
+
+if result['letter'] == random_letter:
+
+    st.write('You got the right sign !')
+
+else:
+
+    st.write('You got the wrong sign !')
