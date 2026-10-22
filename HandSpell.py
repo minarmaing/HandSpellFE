@@ -2,6 +2,11 @@ import streamlit as st
 
 from style import load_style
 load_style()
+st.html("""
+<style>
+h1 { font-size: 4rem !important; }
+</style>
+""")
 
 st.logo(".images/le-wagon-logo.png", size="large")
 
