@@ -16,7 +16,7 @@ API_SIGN_ENDPOINT = API_BASE_URL + 'sign/'
 API_PREDICT_ENDPOINT = API_BASE_URL + 'predict'
 
 st.markdown(
-    "# <span class='accent'>Learn</span> It",
+    "# <span class='accent'>Learn</span>It",
     unsafe_allow_html=True,
 )
 st.subheader("Input a Letter to get its Sign Language gesture !")

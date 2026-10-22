@@ -1,2 +1,2 @@
-streamlit_cloud:
-	-@API_URL=cloud_api_uri streamlit run app-v02.py
+streamlit_local:
+	streamlit run HandSpell.py --server.runOnSave true
