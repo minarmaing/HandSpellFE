@@ -87,6 +87,7 @@ with left:
 
         if uploaded is not None:
             st.session_state.signit_image_uploaded = uploaded
+            st.image(uploaded)
 
 
 with right:

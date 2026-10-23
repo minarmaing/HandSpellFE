@@ -70,13 +70,16 @@ with left:
     st.caption("Use good lighting and keep the whole hand and wrist visible.")
 
     source = st.radio("Input", ["Upload image", "Take a photo"], horizontal=True)
-    upload = (st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"],
+    uploaded = (st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"],
                 key="single_upload") if source == "Upload image"
             else st.camera_input("Take a hand sign photo"))
+    if uploaded is not None:
+        st.session_state.readit_image_uploaded = uploaded
+        st.image(uploaded)
 
 with right:
     st.header("Translation results")
-    compare_predict(st.session_state.removed_letter, upload)
+    compare_predict(st.session_state.removed_letter, uploaded)
 
 if st.button('Refresh'):
 
