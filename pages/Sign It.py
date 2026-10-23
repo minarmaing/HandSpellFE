@@ -3,7 +3,7 @@ import requests
 import numpy as np
 import streamlit as st
 
-from utils import get_image_and_prediction
+from utils import get_image_and_prediction, plot_landmarks
 from style import load_style
 load_style()
 
@@ -36,7 +36,12 @@ st.subheader("Try making the Sign of this letter: **{}**".format(st.session_stat
 def compare_predict(correct_letter, uploaded_image):
     image, predicted_letter, prediction = get_image_and_prediction(uploaded_image)
     if image is not None:
-        st.image(image, width=200)
+
+        if prediction["confidence"] is not None:
+            f = plot_landmarks(image, prediction["landmarks"])
+            st.pyplot(f, width=300)
+        else:
+            st.image(image, width=200)
 
         if predicted_letter:
             prediction_confidence = prediction["confidence"]

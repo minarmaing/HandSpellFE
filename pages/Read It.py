@@ -1,7 +1,7 @@
 import streamlit as st
 
 
-from utils import get_image_and_prediction, CONFIDENCE_THRESHOLD
+from utils import get_image_and_prediction, CONFIDENCE_THRESHOLD, plot_landmarks
 
 from style import load_style
 load_style()
@@ -60,6 +60,12 @@ with left:
 
         st.session_state.readit_image_uploaded = uploaded
 
+
+
+
+
+with right:
+    st.header("Translation results")
     if ('readit_image_uploaded' in st.session_state):
         uploaded_image = st.session_state.readit_image_uploaded
         image, letter, prediction = get_image_and_prediction(uploaded_image)
@@ -67,13 +73,12 @@ with left:
         st.session_state.readit_image = image
         st.session_state.readit_letter = letter
         st.session_state.results = prediction
-
-
-
-with right:
-    st.header("Translation results")
-    if image is not None:
-        st.image(image, width=200)
+        if image is not None:
+            if prediction["confidence"] is not None:
+                f = plot_landmarks(image, prediction["landmarks"])
+                st.pyplot(f, width=300)
+            else:
+                st.image(image, width=200)
 
     results = st.session_state.get("results", [])
     letter = st.session_state.readit_letter
