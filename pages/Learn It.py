@@ -23,7 +23,7 @@ st.subheader("Input a Letter to get its Sign Language gesture !")
 
 LETTERS = list("ABCDEFGHIKLMNOPQRSTUVWXY")
 
-letter = st.text_input('Letter', max_chars=1)
+letter = st.text_input('Letter', max_chars=1, width=50)
 
 if letter:
 
