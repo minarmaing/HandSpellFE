@@ -1,7 +1,7 @@
 import streamlit as st
 
 
-from utils import get_image_and_prediction, CONFIDENCE_THRESHOLD
+from utils import get_image_and_prediction, CONFIDENCE_THRESHOLD, plot_landmarks
 
 from style import load_style
 load_style()
@@ -58,27 +58,39 @@ with left:
             uploaded = st.camera_input("Take a hand sign photo", width=300,
                                     key='readit_image_webcam')
 
-        st.session_state.readit_image_uploaded = uploaded
+        if uploaded is not None:
+            st.session_state.readit_image_uploaded = uploaded
+            st.image(uploaded)
 
+
+
+
+
+with right:
+    st.header("Translation results")
     if ('readit_image_uploaded' in st.session_state):
         uploaded_image = st.session_state.readit_image_uploaded
         image, letter, prediction = get_image_and_prediction(uploaded_image)
 
-        st.session_state.readit_image = image
-        st.session_state.readit_letter = letter
-        st.session_state.results = prediction
-
         if image is not None:
-            st.image(image, width=200)
+            st.session_state.readit_image = image
 
-with right:
-    st.header("Translation results")
+            if prediction["confidence"] is not None:
+                st.session_state.readit_letter = letter
+                st.session_state.results = prediction
+
+                f = plot_landmarks(image, prediction["landmarks"])
+                st.pyplot(f, width=300)
+            else:
+                st.image(image, width=200)
+
     results = st.session_state.get("results", [])
-    letter = st.session_state.readit_letter
+
     # st.write(results)
     if not results:
         st.info("Choose your images and select Translate.")
     elif results:
+        letter = st.session_state.readit_letter
         render_result(results, letter)
         with st.expander("All API responses"):
             st.json(results)

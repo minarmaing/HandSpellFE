@@ -2,6 +2,7 @@ import os
 import requests
 import numpy as np
 import streamlit as st
+import matplotlib.pyplot as plt
 
 from PIL import Image, ImageOps, UnidentifiedImageError
 
@@ -12,6 +13,16 @@ API_PREDICT_ENDPOINT = API_BASE_URL + 'predict'
 CONFIDENCE_THRESHOLD = 0.3
 
 list_words = ['Hello', 'Love', 'Website', 'No', 'Yes']
+
+HAND_CONNECTIONS = [
+    (0, 1), (1, 2), (2, 3), (3, 4),          # thumb
+    (0, 5), (5, 6), (6, 7), (7, 8),          # index
+    (9, 10), (10, 11), (11, 12),             # middle
+    (13, 14), (14, 15), (15, 16),            # ring
+    (0, 17), (17, 18), (18, 19), (19, 20),   # pinky
+    (5, 9), (9, 13), (13, 17),               # palm
+]
+
 
 
 def process_image_for_show(upload):
@@ -80,7 +91,7 @@ def text_to_image_spellit(word: str):
                     timeout=120
                     )
                 st.image(response.content,
-                        caption=letter,
+                        caption=f"**{letter}**",
                         width=64)
 
     return container
@@ -115,3 +126,25 @@ def get_image_and_prediction(uploaded_file):
             st.error(f"Error {response.status_code}: {response.text}")
 
     return processed_upload, predicted_letter, prediction
+
+
+def plot_landmarks(image: Image, landmarks: list) -> plt.figure:
+    # Plot
+    img = np.array(image.convert("RGB"))
+    h, w = img.shape[:2]
+    # st.write(img.shape)
+
+    f, ax = plt.subplots()
+    ax.imshow(img)
+    hand = landmarks
+
+    xs = [lm["x"] * w for lm in hand]
+    ys = [lm["y"] * h for lm in hand]
+
+    for a, b in HAND_CONNECTIONS:
+        ax.plot([xs[a], xs[b]], [ys[a], ys[b]], color="white", linewidth=2)
+    ax.scatter(xs, ys, s=20, c="cyan", zorder=3)
+
+
+    ax.set_axis_off()
+    return f
